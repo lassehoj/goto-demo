@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secret-reader
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: secret-reader
+  template:
+    metadata:
+      labels:
+        app: secret-reader
+    spec:
+      containers:
+      - name: secret-reader
+        image: alpine
+        command: ["/bin/sh"]
+        args: ["-c", "echo $SECRET && sleep 100000"]
+        env:
+          - name: SECRET
+            valueFrom:
+                secretKeyRef:
+                  key: VALUE
+                  name: my-secret
